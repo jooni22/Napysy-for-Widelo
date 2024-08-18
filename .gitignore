@@ -1,0 +1,65 @@
+# Python-related
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.egg-info/
+.eggs/
+*.pyc
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Project-specific directories
+mp3/
+mp4/
+srt/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Temporary files
+*.tmp
+
+# Bash script generated files
+*.out
+
+# Dependency directories
+node_modules/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Deepgram API key file (if used)
+deepgram_api_key.txt
+
+# URL list file
+url.txt
+
+# Ignore all .mp3, .mp4, and .srt files in any directory
+**/*.mp3
+**/*.mp4
+**/*.srt
+
+# But don't ignore .gitkeep files in empty directories
+!**/.gitkeep
