@@ -49,6 +49,11 @@ async def mp3_to_srt(input_file):
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
+# Dodaj nową funkcję do zapisywania tytułu
+def save_title(count, title):
+    with open('title.txt', 'a', encoding='utf-8') as f:
+        f.write(f"{count} {title}\n")
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python script.py <path_to_mp3_file>")

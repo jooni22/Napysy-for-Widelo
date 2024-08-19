@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: install check_dependencies install_python_deps install_system_deps install_mpv transcribe test test_all clean
+.PHONY: install check_dependencies install_python_deps install_system_deps install_mpv transcribe test test_all clean rename
 
 install: check_dependencies install_python_deps
 	@echo "Setting execute permissions for widelo.sh..."
@@ -101,3 +101,32 @@ clean:
 	else \
 		echo "Operation cancelled."; \
 	fi
+
+rename:
+	@echo "Renaming files based on titles..."
+	@if [ ! -f title.txt ]; then \
+		echo "Error: title.txt not found."; \
+		exit 1; \
+	fi
+	@while IFS= read -r line; do \
+		number=$$(echo "$$line" | cut -d' ' -f1); \
+		title=$$(echo "$$line" | cut -d' ' -f2-); \
+		sanitized_title=$$(echo "$$title" | \
+			sed 'y/ĄĆĘŁŃÓŚŹŻąćęłńóśźż/ACELNOSZZacelnoszz/' | \
+			tr -cd '[:alnum:][:space:]' | \
+			tr '[:space:]' '_' | \
+			tr '[:upper:]' '[:lower:]'); \
+		if [ -f "mp4/$$number.mp4" ]; then \
+			mv "mp4/$$number.mp4" "mp4/$$sanitized_title.mp4"; \
+			echo "Renamed mp4/$$number.mp4 to mp4/$$sanitized_title.mp4"; \
+		fi; \
+		if [ -f "srt/$$number.srt" ]; then \
+			mv "srt/$$number.srt" "srt/$$sanitized_title.srt"; \
+			echo "Renamed srt/$$number.srt to srt/$$sanitized_title.srt"; \
+		fi; \
+		if [ -f "mp3/$$number.mp3" ]; then \
+			mv "mp3/$$number.mp3" "mp3/$$sanitized_title.mp3"; \
+			echo "Renamed mp3/$$number.mp3 to mp3/$$sanitized_title.mp3"; \
+		fi; \
+	done < title.txt
+	@echo "Renaming complete."
