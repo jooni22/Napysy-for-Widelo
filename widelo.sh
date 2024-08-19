@@ -11,6 +11,27 @@ done
 # Usunięcie istniejącego pliku title.txt, jeśli istnieje
 rm -f title.txt
 
+# Sprawdzenie, czy w url.txt jest link do playlisty i jego przetworzenie
+if grep -q "list" url.txt; then
+    echo "Playlist link found. Extracting individual video links..."
+    # Tymczasowy plik dla linków z playlisty
+    playlist_file="playlist_url.txt"
+    
+    # Pobieranie linków z playlisty do playlist_url.txt
+    grep "list" url.txt | while read -r playlist_url; do
+        yt-dlp --dump-single-json "$playlist_url" 2>/dev/null | grep -oP '"webpage_url": "\K[^"]*' | grep -v "list" >> "$playlist_file"
+    done
+    
+    # Usuwanie linków do playlist z url.txt
+    sed -i '/list/d' url.txt
+    
+    # Łączenie url.txt i playlist_url.txt
+    cat "$playlist_file" >> url.txt
+    rm "$playlist_file"
+    
+    echo "Updated url.txt with individual video links from playlist."
+fi
+
 # Wczytanie linków do tablicy
 mapfile -t links < url.txt
 

@@ -113,9 +113,11 @@ rename:
 		title=$$(echo "$$line" | cut -d' ' -f2-); \
 		sanitized_title=$$(echo "$$title" | \
 			sed 'y/ĄĆĘŁŃÓŚŹŻąćęłńóśźż/ACELNOSZZacelnoszz/' | \
-			tr -cd '[:alnum:][:space:]' | \
-			tr '[:space:]' '_' | \
-			tr '[:upper:]' '[:lower:]'); \
+			tr -cd '[:alnum:][:space:],.' | \
+			tr '[:space:],.' '_' | \
+			tr -s '_' | \
+			tr '[:upper:]' '[:lower:]' | \
+			sed 's/_*$$//'); \
 		if [ -f "mp4/$$number.mp4" ]; then \
 			mv "mp4/$$number.mp4" "mp4/$$sanitized_title.mp4"; \
 			echo "Renamed mp4/$$number.mp4 to mp4/$$sanitized_title.mp4"; \
